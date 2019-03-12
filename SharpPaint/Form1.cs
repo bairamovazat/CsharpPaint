@@ -17,7 +17,7 @@ namespace SharpPaint
         public Form1()
         {
             InitializeComponent();
-            bitmap = new Bitmap(@"D:\test.jpg", true);
+            bitmap = new Bitmap(360, 240);
             panelPaint.Initialize(bitmap); 
             this.DoubleBuffered = true;
         }

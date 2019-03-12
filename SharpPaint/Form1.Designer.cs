@@ -29,17 +29,16 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panelPaint = new PaintPanel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelPaint = new PaintPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.panelPaint)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -59,6 +58,14 @@
             this.splitContainer1.Size = new System.Drawing.Size(656, 475);
             this.splitContainer1.SplitterDistance = 96;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // panelPaint
+            // 
+            this.panelPaint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelPaint.Location = new System.Drawing.Point(3, 3);
+            this.panelPaint.Name = "panelPaint";
+            this.panelPaint.Size = new System.Drawing.Size(200, 100);
+            this.panelPaint.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -99,15 +106,6 @@
             this.saveToolStripMenuItem.Text = "Сохранить";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
-            // panelPaint
-            // 
-            this.panelPaint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelPaint.Location = new System.Drawing.Point(3, 3);
-            this.panelPaint.Name = "panelPaint";
-            this.panelPaint.Size = new System.Drawing.Size(100, 50);
-            this.panelPaint.TabIndex = 0;
-            this.panelPaint.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -123,7 +121,6 @@
             this.splitContainer1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.panelPaint)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
