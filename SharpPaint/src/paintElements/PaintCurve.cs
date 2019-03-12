@@ -55,6 +55,11 @@ namespace SharpPaint.src.paintElements
             Draw();
         }
 
+        public bool BackAndNeedDelete()
+        {
+            return true;
+        }
+
         public void StartMove(Point point)
         {
             Move(point);

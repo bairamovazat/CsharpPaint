@@ -52,6 +52,11 @@ namespace SharpPaint.src.paintElements
 
         }
 
+        public bool BackAndNeedDelete()
+        {
+            return true;
+        }
+
         public void StartMove(Point point)
         {
             this.X = point.X;

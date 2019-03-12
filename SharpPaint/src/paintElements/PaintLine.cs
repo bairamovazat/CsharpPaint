@@ -30,6 +30,11 @@ namespace SharpPaint.src.paintElements
             throw new NotImplementedException();
         }
 
+        public bool BackAndNeedDelete()
+        {
+            throw new NotImplementedException();
+        }
+
         public void StartMove(Point point)
         {
             throw new NotImplementedException();

@@ -14,5 +14,7 @@ namespace SharpPaint.src.paintElements
         void StartMove(Point point);
         void EndMove(Point point);
         void Move(Point point);
+
+        bool BackAndNeedDelete();
     }
 }

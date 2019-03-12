@@ -57,10 +57,53 @@
     <Compile Include="src\customElements\PaintPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="src\forms\Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\forms\Editor.designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\forms\InputSizeQuestion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\forms\InputSizeQuestion.designer.cs">
+      <DependentUpon>InputSizeQuestion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\forms\InputQuestion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\forms\InputQuestion.designer.cs">
+      <DependentUpon>InputQuestion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\forms\OpenFileQuestion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\forms\OpenFileQuestion.designer.cs">
+      <DependentUpon>OpenFileQuestion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\forms\SaveFileQuestion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\forms\SaveFileQuestion.designer.cs">
+      <DependentUpon>SaveFileQuestion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\forms\PathQuestions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\forms\PathQuestions.designer.cs">
+      <DependentUpon>PathQuestions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\forms\Question.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\forms\Question.designer.cs">
+      <DependentUpon>Question.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\paintElements\PaintLine.cs" />
     <Compile Include="src\paintElements\IPaintObject.cs" />
-    <Compile Include="src\paintElements\PaintPointList.cs" />
+    <Compile Include="src\paintElements\PaintCurve.cs" />
     <Compile Include="src\paintElements\PaintPoint.cs" />
+    <Compile Include="src\paintElements\PaintImage.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -73,6 +116,30 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="src\customElements\PaintPanel.resx">
+      <DependentUpon>PaintPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\forms\Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\forms\InputSizeQuestion.resx">
+      <DependentUpon>InputSizeQuestion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\forms\InputQuestion.resx">
+      <DependentUpon>InputQuestion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\forms\OpenFileQuestion.resx">
+      <DependentUpon>OpenFileQuestion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\forms\SaveFileQuestion.resx">
+      <DependentUpon>SaveFileQuestion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\forms\PathQuestions.resx">
+      <DependentUpon>PathQuestions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\forms\Question.resx">
+      <DependentUpon>Question.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
