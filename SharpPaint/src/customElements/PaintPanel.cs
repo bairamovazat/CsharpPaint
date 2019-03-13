@@ -17,10 +17,14 @@ namespace SharpPaint
         private List<IPaintObject> paintObjectList = new List<IPaintObject>();
         private IPaintObject currentPaintObject;
         private Bitmap bitmap;
+        private PointF zoomPoint = new PointF(1.0F, 1.0F);
+        private MouseType mouseType = MouseType.Pencil;
 
         public Graphics PanelDraftGraphics { get => panelDraftGraphics; set => panelDraftGraphics = value; }
         public Bitmap Bitmap { get => bitmap; set => bitmap = value; }
-        private int test = 1;
+        internal IPaintObject CurrentPaintObject { get => currentPaintObject; set => currentPaintObject = value; }
+        public PointF ZoomPoint { get => zoomPoint; set => zoomPoint = value; }
+        public MouseType MouseType { get => mouseType; set => mouseType = value; }
 
         public void Initialize(Bitmap bitmap)
         {
@@ -31,7 +35,7 @@ namespace SharpPaint
             PaintImage paintImage = new PaintImage(PanelDraftGraphics, this, bitmap, new Point(0, 0));
             paintImage.HasBack = false;
             paintObjectList.Add(paintImage);
-           
+
             this.MouseDown -= PaintPanel_MouseDown;
             this.MouseUp -= PaintPanel_MouseUp;
             this.MouseMove -= PaintPanel_MouseMove;
@@ -48,7 +52,12 @@ namespace SharpPaint
             paintObjectList.ForEach(obj => obj.Draw());
             if (this.bitmap != null)
             {
-                this.Image = bitmap;
+                if (this.Image != null)
+                {
+                    this.Image.Dispose();
+                }
+                Image image = bitmap;
+                this.Image = new Bitmap(image, ScaleSize(image.Size));
             }
         }
 
@@ -64,30 +73,52 @@ namespace SharpPaint
             }
         }
 
+        public void InsertImage(Bitmap bitmap)
+        {
+            this.paint = false;
+            CurrentPaintObject = new PaintImage(PanelDraftGraphics, this, bitmap, new Point(0, 0));
+            paintObjectList.Add(CurrentPaintObject);
+        }
+
+        private IPaintObject GetCurrentPaintObject()
+        {
+            switch (mouseType)
+            {
+                case (MouseType.Pencil):
+                    return new PaintCurve(PanelDraftGraphics);
+                case (MouseType.HotSpot):
+                    return new PaintImage(PanelDraftGraphics, this, true);
+                default: return null;
+            }
+        }
         private void PaintPanel_MouseDown(object sender, MouseEventArgs e)
         {
             paint = true;
-            currentPaintObject = new PaintImage(PanelDraftGraphics, this);
-            //currentPaintObject = new PaintCurve(PanelDraftGraphics);
-            currentPaintObject.StartMove(new Point(e.X, e.Y));
+            if (CurrentPaintObject == null || !(CurrentPaintObject is PaintImage)
+                || !((PaintImage)CurrentPaintObject).MouseInImage(ScalePoint(new Point(e.X, e.Y))))
+            {
+                CurrentPaintObject = GetCurrentPaintObject();
+                if (CurrentPaintObject != null) {
+                    paintObjectList.Add(CurrentPaintObject);
+                }
+            }
+            CurrentPaintObject.StartMove(ScalePoint(new Point(e.X, e.Y)));
         }
 
         private void PaintPanel_MouseUp(object sender, MouseEventArgs e)
         {
             paint = false;
-            if (currentPaintObject != null)
+            if (CurrentPaintObject != null)
             {
-                currentPaintObject.EndMove(new Point(e.X, e.Y));
-                paintObjectList.Add(currentPaintObject);
-                currentPaintObject = null;
+                CurrentPaintObject.EndMove(ScalePoint(new Point(e.X, e.Y)));
             }
         }
 
         private void PaintPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (paint && currentPaintObject != null)
+            if (paint && CurrentPaintObject != null)
             {
-                currentPaintObject.Move(new Point(e.X, e.Y));
+                CurrentPaintObject.Move(ScalePoint(new Point(e.X, e.Y)));
             }
         }
 
@@ -95,10 +126,56 @@ namespace SharpPaint
         {
             if (Control.ModifierKeys == Keys.Control)
             {
-                int numberOfTextLinesToMove = e.Delta * SystemInformation.MouseWheelScrollLines / 120;
-                test = test + numberOfTextLinesToMove;
-                Console.WriteLine(test);
+                float deltaZoom = e.Delta / 1200.0F;
+                if (ZoomPoint.X + deltaZoom >= 1.0 && ZoomPoint.Y + deltaZoom >= 1.0)
+                {
+                    ZoomPoint = new PointF(ZoomPoint.X + deltaZoom, ZoomPoint.Y + deltaZoom);
+                    UpdatePanelScale();
+                }
             }
+        }
+
+        private void UpdatePanelScale()
+        {
+            this.Size = ScaleSize(this.Bitmap.Size);
+        }
+
+        public Point ScalePoint(Point point)
+        {
+            int newX = Convert.ToInt32(point.X / ZoomPoint.X);
+            int newY = Convert.ToInt32(point.Y / ZoomPoint.Y);
+            return new Point(newX, newY);
+        }
+
+        public Size ScaleSize(Size size)
+        {
+            int newWidth = Convert.ToInt32(size.Width * ZoomPoint.X);
+            int newHeight = Convert.ToInt32(size.Height * ZoomPoint.Y);
+            return new Size(newWidth, newHeight);
+        }
+
+        public Rectangle ScaleRectangle(Rectangle rectangle)
+        {
+            return new Rectangle(ScalePoint(rectangle.Location), ScaleSize(rectangle.Size));
+        }
+
+        public Point ReScalePoint(Point point)
+        {
+            int newX = Convert.ToInt32(point.X * ZoomPoint.X);
+            int newY = Convert.ToInt32(point.Y * ZoomPoint.Y);
+            return new Point(newX, newY);
+        }
+
+        public Size ReScaleSize(Size size)
+        {
+            int newWidth = Convert.ToInt32(size.Width / ZoomPoint.X);
+            int newHeight = Convert.ToInt32(size.Height / ZoomPoint.Y);
+            return new Size(newWidth, newHeight);
+        }
+
+        public Rectangle ReScaleRectangle(Rectangle rectangle)
+        {
+            return new Rectangle(ReScalePoint(rectangle.Location), ReScaleSize(rectangle.Size));
         }
     }
 }

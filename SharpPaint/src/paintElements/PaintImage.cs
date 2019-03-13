@@ -14,8 +14,11 @@ namespace SharpPaint.src.paintElements
         private Point startPoint;
         private Point movedPoint;
 
+        private Point offsetMove;
+
         private Bitmap bitmap;
         private Bitmap emptyBitmap;
+        private bool paintEmptyBlock = false;
 
         private bool hasBack = true;
 
@@ -24,22 +27,37 @@ namespace SharpPaint.src.paintElements
         public Point StartPoint { get => startPoint; set => startPoint = value; }
         public Point MovedPoint { get => movedPoint; set => movedPoint = value; }
 
-        public Bitmap Bitmap {
-            get  {
+        public Bitmap Bitmap
+        {
+            get
+            {
                 return bitmap;
             }
-            set {
+            set
+            {
                 this.emptyBitmap = new Bitmap(value.Width, value.Height);
+                Graphics graphics = Graphics.FromImage(emptyBitmap);
+                graphics.Clear(Color.White);
+                graphics.Dispose();
                 bitmap = value;
             }
         }
 
         public bool HasBack { get => hasBack; set => hasBack = value; }
         public PaintPanel PaintPanel { get => paintPanel; set => paintPanel = value; }
+        public bool PaintEmptyBlock { get => paintEmptyBlock; set => paintEmptyBlock = value; }
 
-        public PaintImage(Graphics graphics, PaintPanel paintPanel) {
+        public PaintImage(Graphics graphics, PaintPanel paintPanel)
+        {
             this.graphics = graphics;
             this.PaintPanel = paintPanel;
+        }
+
+        public PaintImage(Graphics graphics, PaintPanel paintPanel, bool paintEmptyBlock)
+        {
+            this.graphics = graphics;
+            this.PaintPanel = paintPanel;
+            this.PaintEmptyBlock = paintEmptyBlock;
         }
 
         public PaintImage(Graphics graphics, PaintPanel paintPanel, Bitmap bitmap, Point startPoint)
@@ -58,41 +76,71 @@ namespace SharpPaint.src.paintElements
 
         public void Draw()
         {
-          
-            if (this.Bitmap != null && this.MovedPoint != null) {
+            if (!this.startPoint.Equals(this.movedPoint) && this.emptyBitmap != null && PaintEmptyBlock)
+            {
+                this.graphics.DrawImage(this.emptyBitmap, this.StartPoint);
+            }
+
+            if (this.Bitmap != null && this.MovedPoint != null)
+            {
                 this.graphics.DrawImage(this.Bitmap, this.MovedPoint);
             }
         }
 
         public void EndMove(Point point)
         {
-            int x = Math.Min(startPoint.X, point.X);
-            int y = Math.Min(startPoint.Y, point.Y);
-            int width = Math.Abs(startPoint.X - point.X);
-            int height = Math.Abs(startPoint.Y - point.Y);
+            if (startPoint.X == point.X || startPoint.Y == point.Y)
+            {
+                this.movedPoint = startPoint;
+            }
+            else if (Bitmap == null && !startPoint.Equals(point))
+            {
+                int x = Math.Max(0, Math.Min(startPoint.X, point.X));
+                int y = Math.Max(0, Math.Min(startPoint.Y, point.Y));
+                int width = Math.Abs(startPoint.X - point.X);
+                int height = Math.Abs(startPoint.Y - point.Y);
 
-            Bitmap bmp = new Bitmap(width, height);
-            Rectangle rect = new Rectangle(x, y, width, height);
-            PaintPanel.DrawToBitmap(bmp, rect);
+                var rect = PaintPanel.ClientRectangle;
+                using (var output = new Bitmap(rect.Width, rect.Height, PaintPanel.Image.PixelFormat))
+                {
+                    PaintPanel.DrawToBitmap(output, rect);
+                    this.Bitmap = output.Clone(new Rectangle(x, y, width, height), output.PixelFormat);
+                }
+                this.MovedPoint = new Point(x, y);
+                this.StartPoint = new Point(x, y);
 
-            this.Bitmap = bmp;
-            this.graphics.Clear(Color.White);
-            this.Draw();
+                this.graphics.Clear(Color.White);
+                this.Draw();
+            }
         }
 
         public void Move(Point point)
         {
-            this.MovedPoint = new Point(point.X, point.Y);
+            if (this.Bitmap != null)
+            {
+                //TODO Доделать
+                int newX = point.X - this.startPoint.X;
+                int newY = point.Y - this.startPoint.Y;
+                this.movedPoint = new Point(point.X, point.Y);
+            }
         }
 
         public void StartMove(Point point)
         {
-            this.StartPoint = point;
+            if (Bitmap == null)
+            {
+                this.StartPoint = point;
+            }
+            else
+            {
+                this.offsetMove = new Point(movedPoint.X - point.X, movedPoint.Y - point.Y);
+            }
         }
 
-        public bool MouseInImage(Point point) {
-            return movedPoint.X >= point.X && movedPoint.X + bitmap.Width <= point.X
-                && movedPoint.Y >= point.Y && movedPoint.Y + bitmap.Height <= point.Y;
+        public bool MouseInImage(Point point)
+        {
+            return bitmap != null && movedPoint.X <= point.X && movedPoint.X + bitmap.Width >= point.X
+                && movedPoint.Y <= point.Y && movedPoint.Y + bitmap.Height >= point.Y;
         }
     }
 }

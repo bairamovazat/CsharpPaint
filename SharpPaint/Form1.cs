@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpPaint.src.paintElements;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -29,7 +30,6 @@ namespace SharpPaint
                 labelMousePositon.Text = (e.X + ", " + e.Y);
                 labelMousePositon.Update();
             };
-            this.DoubleBuffered = true;
             this.KeyDown += Global_KeyDown;
         }
 
@@ -47,7 +47,7 @@ namespace SharpPaint
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             pictureBox.BorderStyle = BorderStyle.FixedSingle;
-         
+
 
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
         }
@@ -73,7 +73,24 @@ namespace SharpPaint
             if (e.Control && e.KeyCode == Keys.Z)
             {
                 pictureBox.BackAction();
-                Console.WriteLine("true");
+            }
+            else if (e.Control && e.KeyCode == Keys.C)
+            {
+                IPaintObject paintObject = pictureBox.CurrentPaintObject;
+                if (paintObject is PaintImage)
+                {
+                    PaintImage paintImage = (PaintImage)paintObject;
+                    Clipboard.SetImage(paintImage.Bitmap);
+                    System.Media.SystemSounds.Beep.Play();
+                }
+            }
+            else if (e.Control && e.KeyCode == Keys.V)
+            {
+                if (Clipboard.ContainsImage())
+                {
+                    Image image = Clipboard.GetImage();
+                    pictureBox.InsertImage(new Bitmap(image, image.Size));
+                }
             }
         }
 
@@ -182,5 +199,35 @@ namespace SharpPaint
             }
         }
 
+        private void buttonPencil_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.MouseType = MouseType.Pencil;
+        }
+
+        private void buttonEraser_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonLine_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonEllipse_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonRectangle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonHotSpot_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.MouseType = MouseType.HotSpot;
+
+        }
     }
 }

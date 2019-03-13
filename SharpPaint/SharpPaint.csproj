@@ -99,6 +99,7 @@
     <Compile Include="src\forms\Question.designer.cs">
       <DependentUpon>Question.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\MouseType.cs" />
     <Compile Include="src\paintElements\PaintLine.cs" />
     <Compile Include="src\paintElements\IPaintObject.cs" />
     <Compile Include="src\paintElements\PaintCurve.cs" />
@@ -152,6 +153,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\ellipse.png" />
+    <Content Include="resources\eraser.png" />
+    <Content Include="resources\hot-spot.png" />
+    <Content Include="resources\line.png" />
+    <Content Include="resources\pencil.png" />
+    <Content Include="resources\rectangle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
