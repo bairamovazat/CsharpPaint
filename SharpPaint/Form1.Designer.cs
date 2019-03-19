@@ -55,9 +55,7 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.panelButtons.SuspendLayout();
-            this.panelMainPaint.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -202,6 +200,7 @@
             // 
             // buttonHotSpot
             // 
+            this.buttonHotSpot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonHotSpot.Image = ((System.Drawing.Image)(resources.GetObject("buttonHotSpot.Image")));
             this.buttonHotSpot.Location = new System.Drawing.Point(42, 73);
             this.buttonHotSpot.Name = "buttonHotSpot";
@@ -274,7 +273,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelMainPaint.AutoScroll = true;
-            this.panelMainPaint.Controls.Add(this.listBox1);
             this.panelMainPaint.Location = new System.Drawing.Point(86, 24);
             this.panelMainPaint.Margin = new System.Windows.Forms.Padding(0);
             this.panelMainPaint.Name = "panelMainPaint";
@@ -330,15 +328,6 @@
             this.saveAsToolStripMenuItem.Text = "Save as";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(126, 85);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 95);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox1_KeyDown);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -350,7 +339,6 @@
             this.Name = "Form1";
             this.Text = "Paint";
             this.panelButtons.ResumeLayout(false);
-            this.panelMainPaint.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -386,7 +374,6 @@
         private System.Windows.Forms.Button buttonCtrlC;
         private System.Windows.Forms.Button buttonCtrlZ;
         private System.Windows.Forms.Button buttonCtrlV;
-        private System.Windows.Forms.ListBox listBox1;
     }
 }
 

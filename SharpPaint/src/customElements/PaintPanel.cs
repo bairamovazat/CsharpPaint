@@ -43,6 +43,7 @@ namespace SharpPaint
             this.MouseDown -= PaintPanel_MouseDown;
             this.MouseUp -= PaintPanel_MouseUp;
             this.MouseMove -= PaintPanel_MouseMove;
+            this.MouseWheel -= PaintPanel_MouseWheel;
 
             this.MouseDown += PaintPanel_MouseDown;
             this.MouseUp += PaintPanel_MouseUp;
@@ -52,7 +53,6 @@ namespace SharpPaint
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
             paintObjectList.ForEach(obj => obj.Draw());
             if (this.bitmap != null)
             {
@@ -63,6 +63,7 @@ namespace SharpPaint
                 Image image = bitmap;
                 this.Image = new Bitmap(image, ScaleSize(image.Size));
             }
+            base.OnPaint(e);
         }
 
         public void BackAction()
@@ -109,6 +110,9 @@ namespace SharpPaint
             if (CurrentPaintObject == null || !(CurrentPaintObject is PaintImage)
                 || !((PaintImage)CurrentPaintObject).MouseInImage(ScalePoint(new Point(e.X, e.Y))))
             {
+                if (CurrentPaintObject is PaintImage) {
+                    ((PaintImage)CurrentPaintObject).ShowRectangle = false;
+                }
                 CurrentPaintObject = GetCurrentPaintObject();
                 if (CurrentPaintObject != null) {
                     CurrentPaintObject.LineSize = LineSize;

@@ -119,6 +119,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="src\customElements\PaintPanel.resx">
       <DependentUpon>PaintPanel.cs</DependentUpon>
@@ -159,9 +160,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\ellipse.png" />
+    <None Include="resources\eraser.cur" />
     <Content Include="resources\eraser.png" />
     <Content Include="resources\hot-spot.png" />
     <Content Include="resources\line.png" />
+    <None Include="resources\Pencil.cur" />
     <Content Include="resources\pencil.png" />
     <Content Include="resources\rectangle.png" />
   </ItemGroup>
