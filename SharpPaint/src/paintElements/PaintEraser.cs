@@ -7,25 +7,23 @@ using System.Threading.Tasks;
 
 namespace SharpPaint.src.paintElements
 {
-    class PaintPoint : IPaintObject
+    class PaintEraser : IPaintObject
     {
         private int x;
         private int y;
-        private Color color = Color.Black;
-        private int lineSize = 1;
+        private Color color = Color.White;
+        private int lineSize = 10;
         private Graphics graphics;
+        private List<Point> pointLists = new List<Point>();
 
-        public PaintPoint(Graphics graphics)
+        public PaintEraser(Graphics graphics)
         {
-            this.X = x;
-            this.Y = y;
             this.Graphics = graphics;
         }
 
-        public PaintPoint(Graphics graphics, Color color, int size) {
-            this.X = x;
-            this.Y = y;
-            this.Graphics = graphics;
+        public PaintEraser(Graphics graphics, Color color, int size)
+        {
+            this.Graphics = graphics;   
             this.Color = color;
             this.LineSize = size;
         }
@@ -38,8 +36,12 @@ namespace SharpPaint.src.paintElements
 
         public void Draw()
         {
-            Pen pen = new Pen(this.Color);
-            graphics.DrawRectangle(pen, x, y, LineSize, LineSize);
+            if (pointLists.Count >= 2)
+            {
+                Pen pen = new Pen(Color.White, this.LineSize);
+                graphics.DrawLines(pen, pointLists.ToArray());
+            }
+
         }
 
         public void EndMove(Point point)
@@ -49,7 +51,8 @@ namespace SharpPaint.src.paintElements
 
         public void Move(Point point)
         {
-
+            pointLists.Add(point);
+            Draw();
         }
 
         public bool BackAndNeedDelete()
@@ -59,9 +62,7 @@ namespace SharpPaint.src.paintElements
 
         public void StartMove(Point point)
         {
-            this.X = point.X;
-            this.Y = point.Y;
-            Draw();
+            Move(point);
         }
     }
 }

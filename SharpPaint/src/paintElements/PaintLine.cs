@@ -9,35 +9,57 @@ namespace SharpPaint.src.paintElements
 {
     class PaintLine : IPaintObject
     {
-        public PaintLine() {
-            throw new NotImplementedException();
+        private Point startPoint;
+        private Point endPoint;
+
+        private Color color = Color.Black;
+        private int lineSize = 1;
+        private Graphics graphics;
+
+        public PaintLine(Graphics graphics)
+        {
+            this.Graphics = graphics;
         }
 
-        public Graphics Graphics { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public PaintLine(Graphics graphics, Color color, int size)
+        {
+            this.Graphics = graphics;
+            this.Color = color;
+            this.LineSize = size;
+        }
+
+        public Color Color { get => Color1; set => Color1 = value; }
+        public int Size { get => LineSize; set => LineSize = value; }
+        public Graphics Graphics { get => graphics; set => graphics = value; }
+        public Color Color1 { get => color; set => color = value; }
+        public int LineSize { get => lineSize; set => lineSize = value; }
 
         public void Draw()
         {
-            throw new NotImplementedException();
+            Pen pen = new Pen(this.Color, this.LineSize);
+            graphics.DrawLine(pen, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
         }
 
         public void EndMove(Point point)
         {
-            throw new NotImplementedException();
+            this.endPoint = point;
         }
 
         public void Move(Point point)
         {
-            throw new NotImplementedException();
+            this.endPoint = point;
+            this.Draw();
         }
 
         public bool BackAndNeedDelete()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public void StartMove(Point point)
         {
-            throw new NotImplementedException();
+            this.startPoint = point;
+            this.endPoint = this.startPoint;
         }
     }
 }

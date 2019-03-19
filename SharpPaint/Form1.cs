@@ -27,10 +27,17 @@ namespace SharpPaint
             InitPictureBox();
             pictureBox.MouseMove += (source, e) =>
             {
-                labelMousePositon.Text = (e.X + ", " + e.Y);
+                Point point = pictureBox.ScalePoint(new Point(e.X, e.Y));
+                labelMousePositon.Text = (point.X + ", " + point.Y);
                 labelMousePositon.Update();
             };
-            this.KeyDown += Global_KeyDown;
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            this.Global_KeyDown(keyData);
+            base.ProcessDialogKey(keyData);
+            return true;
         }
 
         public void InitPictureBox()
@@ -48,13 +55,14 @@ namespace SharpPaint
             pictureBox.TabStop = false;
             pictureBox.BorderStyle = BorderStyle.FixedSingle;
 
-
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
         }
 
         public void createNewEmptyPaintPage(Size size)
         {
             bitmap = new Bitmap(size.Width, size.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+            g.Clear(Color.White);
             pictureBox.Initialize(bitmap);
         }
 
@@ -68,13 +76,13 @@ namespace SharpPaint
         }
 
 
-        private void Global_KeyDown(object sender, KeyEventArgs e)
+        private void Global_KeyDown(Keys keyData)
         {
-            if (e.Control && e.KeyCode == Keys.Z)
+            if (ModifierKeys.HasFlag(Keys.Control) && keyData.Equals(Keys.Z))
             {
                 pictureBox.BackAction();
             }
-            else if (e.Control && e.KeyCode == Keys.C)
+            else if (ModifierKeys.HasFlag(Keys.Control) && keyData.Equals(Keys.C))
             {
                 IPaintObject paintObject = pictureBox.CurrentPaintObject;
                 if (paintObject is PaintImage)
@@ -84,7 +92,7 @@ namespace SharpPaint
                     System.Media.SystemSounds.Beep.Play();
                 }
             }
-            else if (e.Control && e.KeyCode == Keys.V)
+            else if (ModifierKeys.HasFlag(Keys.Control) && keyData.Equals(Keys.V))
             {
                 if (Clipboard.ContainsImage())
                 {
@@ -206,28 +214,96 @@ namespace SharpPaint
 
         private void buttonEraser_Click(object sender, EventArgs e)
         {
-
+            this.pictureBox.MouseType = MouseType.Eraser;
         }
 
         private void buttonLine_Click(object sender, EventArgs e)
         {
-
+            this.pictureBox.MouseType = MouseType.Line;
         }
 
         private void buttonEllipse_Click(object sender, EventArgs e)
         {
-
+            this.pictureBox.MouseType = MouseType.Ellipse;
         }
 
         private void buttonRectangle_Click(object sender, EventArgs e)
         {
-
+            this.pictureBox.MouseType = MouseType.Rectangle;
         }
 
         private void buttonHotSpot_Click(object sender, EventArgs e)
         {
             this.pictureBox.MouseType = MouseType.HotSpot;
+        }
 
+        private void buttonBlack_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.Color = Color.Black;
+        }
+
+        private void buttonRed_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.Color = Color.Red;
+        }
+
+        private void buttonWhite_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.Color = Color.White;
+        }
+
+        private void buttonGreen_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.Color = Color.Green;
+        }
+
+        private void button1px_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.LineSize = 1;
+        }
+
+        private void button5px_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.LineSize = 5;
+        }
+
+        private void button10px_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.LineSize = 10;
+        }
+
+        private void button20px_Click(object sender, EventArgs e)
+        {
+            this.pictureBox.LineSize = 20;
+        }
+
+        private void buttonCtrlC_Click(object sender, EventArgs e)
+        {
+            IPaintObject paintObject = pictureBox.CurrentPaintObject;
+            if (paintObject is PaintImage)
+            {
+                PaintImage paintImage = (PaintImage)paintObject;
+                Clipboard.SetImage(paintImage.Bitmap);
+                System.Media.SystemSounds.Beep.Play();
+            }
+        }
+
+        private void buttonCtrlV_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsImage())
+            {
+                Image image = Clipboard.GetImage();
+                pictureBox.InsertImage(new Bitmap(image, image.Size));
+            }
+        }
+
+        private void buttonCtrlZ_Click(object sender, EventArgs e)
+        {
+            pictureBox.BackAction();
+        }
+
+        private void listBox1_KeyDown(object sender, KeyEventArgs e)
+        {
         }
     }
 }

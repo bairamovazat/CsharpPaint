@@ -10,6 +10,9 @@ namespace SharpPaint.src.paintElements
     interface IPaintObject
     {
         Graphics Graphics { get; set; }
+        int LineSize { get; set; }
+        Color Color{ get; set; }
+
         void Draw();
         void StartMove(Point point);
         void EndMove(Point point);

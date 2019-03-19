@@ -19,12 +19,16 @@ namespace SharpPaint
         private Bitmap bitmap;
         private PointF zoomPoint = new PointF(1.0F, 1.0F);
         private MouseType mouseType = MouseType.Pencil;
+        private Color color = Color.Black;
+        private int lineSize = 3;
 
         public Graphics PanelDraftGraphics { get => panelDraftGraphics; set => panelDraftGraphics = value; }
         public Bitmap Bitmap { get => bitmap; set => bitmap = value; }
         internal IPaintObject CurrentPaintObject { get => currentPaintObject; set => currentPaintObject = value; }
         public PointF ZoomPoint { get => zoomPoint; set => zoomPoint = value; }
         public MouseType MouseType { get => mouseType; set => mouseType = value; }
+        public Color Color { get => color; set => color = value; }
+        public int LineSize { get => lineSize; set => lineSize = value; }
 
         public void Initialize(Bitmap bitmap)
         {
@@ -88,6 +92,14 @@ namespace SharpPaint
                     return new PaintCurve(PanelDraftGraphics);
                 case (MouseType.HotSpot):
                     return new PaintImage(PanelDraftGraphics, this, true);
+                case (MouseType.Rectangle):
+                    return new PaintRectangle(PanelDraftGraphics);
+                case (MouseType.Ellipse):
+                    return new PaintEllipse(PanelDraftGraphics);
+                case (MouseType.Line):
+                    return new PaintLine(PanelDraftGraphics);
+                case (MouseType.Eraser):
+                    return new PaintEraser(PanelDraftGraphics);
                 default: return null;
             }
         }
@@ -99,6 +111,8 @@ namespace SharpPaint
             {
                 CurrentPaintObject = GetCurrentPaintObject();
                 if (CurrentPaintObject != null) {
+                    CurrentPaintObject.LineSize = LineSize;
+                    CurrentPaintObject.Color = Color;
                     paintObjectList.Add(CurrentPaintObject);
                 }
             }

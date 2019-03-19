@@ -12,7 +12,7 @@ namespace SharpPaint.src.paintElements
         private int x;
         private int y;
         private Color color = Color.Black;
-        private int size = 1;
+        private int lineSize = 1;
         private Graphics graphics;
         private List<Point> pointLists = new List<Point>();
 
@@ -25,20 +25,21 @@ namespace SharpPaint.src.paintElements
         {
             this.Graphics = graphics;   
             this.Color = color;
-            this.size = size;
+            this.LineSize = size;
         }
 
         public int X { get => x; set => x = value; }
         public int Y { get => y; set => y = value; }
         public Color Color { get => color; set => color = value; }
-        public int Size { get => size; set => size = value; }
+        public int Size { get => LineSize; set => LineSize = value; }
         public Graphics Graphics { get => graphics; set => graphics = value; }
+        public int LineSize { get => lineSize; set => lineSize = value; }
 
         public void Draw()
         {
             if (pointLists.Count >= 2)
             {
-                Pen pen = new Pen(this.Color, this.size);
+                Pen pen = new Pen(this.Color, this.LineSize);
                 graphics.DrawLines(pen, pointLists.ToArray());
             }
 

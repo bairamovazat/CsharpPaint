@@ -22,6 +22,9 @@ namespace SharpPaint.src.paintElements
 
         private bool hasBack = true;
 
+        private int lineSize;
+        private Color color;
+
         public Graphics Graphics { get => graphics; set => graphics = value; }
 
         public Point StartPoint { get => startPoint; set => startPoint = value; }
@@ -46,6 +49,8 @@ namespace SharpPaint.src.paintElements
         public bool HasBack { get => hasBack; set => hasBack = value; }
         public PaintPanel PaintPanel { get => paintPanel; set => paintPanel = value; }
         public bool PaintEmptyBlock { get => paintEmptyBlock; set => paintEmptyBlock = value; }
+        public int LineSize { get => lineSize; set => lineSize = value; }
+        public Color Color { get => color; set => color = value; }
 
         public PaintImage(Graphics graphics, PaintPanel paintPanel)
         {

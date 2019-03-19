@@ -7,49 +7,50 @@ using System.Threading.Tasks;
 
 namespace SharpPaint.src.paintElements
 {
-    class PaintPoint : IPaintObject
+    class PaintRectangle : IPaintObject
     {
-        private int x;
-        private int y;
+        private Point startPoint;
+        private Point endPoint;
+
         private Color color = Color.Black;
         private int lineSize = 1;
         private Graphics graphics;
 
-        public PaintPoint(Graphics graphics)
+        public PaintRectangle(Graphics graphics)
         {
-            this.X = x;
-            this.Y = y;
             this.Graphics = graphics;
         }
 
-        public PaintPoint(Graphics graphics, Color color, int size) {
-            this.X = x;
-            this.Y = y;
+        public PaintRectangle(Graphics graphics, Color color, int size)
+        {
             this.Graphics = graphics;
             this.Color = color;
             this.LineSize = size;
         }
 
-        public int X { get => x; set => x = value; }
-        public int Y { get => y; set => y = value; }
         public Color Color { get => color; set => color = value; }
         public Graphics Graphics { get => graphics; set => graphics = value; }
         public int LineSize { get => lineSize; set => lineSize = value; }
 
         public void Draw()
         {
-            Pen pen = new Pen(this.Color);
-            graphics.DrawRectangle(pen, x, y, LineSize, LineSize);
+            int x = Math.Max(0, Math.Min(startPoint.X, endPoint.X));
+            int y = Math.Max(0, Math.Min(startPoint.Y, endPoint.Y));
+            int width = Math.Abs(startPoint.X - endPoint.X);
+            int height = Math.Abs(startPoint.Y - endPoint.Y);
+            Pen pen = new Pen(this.Color, this.LineSize);
+            graphics.DrawRectangle(pen, new Rectangle(x, y, width, height));
         }
 
         public void EndMove(Point point)
         {
-
+            this.endPoint = point;
         }
 
         public void Move(Point point)
         {
-
+            this.endPoint = point;
+            this.Draw();
         }
 
         public bool BackAndNeedDelete()
@@ -59,9 +60,8 @@ namespace SharpPaint.src.paintElements
 
         public void StartMove(Point point)
         {
-            this.X = point.X;
-            this.Y = point.Y;
-            Draw();
+            this.startPoint = point;
+            this.endPoint = this.startPoint;
         }
     }
 }
