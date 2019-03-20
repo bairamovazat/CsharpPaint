@@ -53,9 +53,9 @@ namespace SharpPaint
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            paintObjectList.ForEach(obj => obj.Draw());
             if (this.bitmap != null)
             {
+                paintObjectList.ForEach(obj => obj.Draw());
                 if (this.Image != null)
                 {
                     this.Image.Dispose();
@@ -81,7 +81,14 @@ namespace SharpPaint
         public void InsertImage(Bitmap bitmap)
         {
             this.paint = false;
+            if (CurrentPaintObject is PaintImage)
+            {
+                ((PaintImage)CurrentPaintObject).ShowRectangle = false;
+            }
+
             CurrentPaintObject = new PaintImage(PanelDraftGraphics, this, bitmap, new Point(0, 0));
+            ((PaintImage)CurrentPaintObject).ShowRectangle = true;
+
             paintObjectList.Add(CurrentPaintObject);
         }
 

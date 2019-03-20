@@ -165,6 +165,7 @@
     <Content Include="resources\hot-spot.png" />
     <Content Include="resources\line.png" />
     <None Include="resources\Pencil.cur" />
+    <Content Include="resources\icon.ico" />
     <Content Include="resources\pencil.png" />
     <Content Include="resources\rectangle.png" />
   </ItemGroup>

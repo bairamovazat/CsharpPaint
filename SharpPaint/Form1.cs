@@ -21,6 +21,8 @@ namespace SharpPaint
         private Size defaultSize = new Size(360, 240);
         private PaintPanel pictureBox;
 
+        private ComponentResourceManager resources = new ComponentResourceManager(typeof(Form1));
+
         public Form1()
         {
             InitializeComponent();
@@ -33,11 +35,10 @@ namespace SharpPaint
             };
         }
 
-        protected override bool ProcessDialogKey(Keys keyData)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             this.Global_KeyDown(keyData);
-            base.ProcessDialogKey(keyData);
-            return true;
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         public void InitPictureBox()
@@ -78,11 +79,12 @@ namespace SharpPaint
 
         private void Global_KeyDown(Keys keyData)
         {
-            if (ModifierKeys.HasFlag(Keys.Control) && keyData.Equals(Keys.Z))
+
+            if (keyData == (Keys.Control | Keys.Z))
             {
                 pictureBox.BackAction();
             }
-            else if (ModifierKeys.HasFlag(Keys.Control) && keyData.Equals(Keys.C))
+            else if (keyData == (Keys.Control | Keys.C))
             {
                 IPaintObject paintObject = pictureBox.CurrentPaintObject;
                 if (paintObject is PaintImage)
@@ -92,7 +94,7 @@ namespace SharpPaint
                     System.Media.SystemSounds.Beep.Play();
                 }
             }
-            else if (ModifierKeys.HasFlag(Keys.Control) && keyData.Equals(Keys.V))
+            else if (keyData == (Keys.Control | Keys.V))
             {
                 if (Clipboard.ContainsImage())
                 {
@@ -101,7 +103,6 @@ namespace SharpPaint
                 }
             }
         }
-
 
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -207,120 +208,127 @@ namespace SharpPaint
             }
         }
 
-        private void disableAllButtons() {
-            //buttonPencil.Enabled = false;
-            //buttonHotSpot.Enabled = false;
-            //buttonRectangle.Enabled = false;
-            //buttonEllipse.Enabled = false;
-            //buttonLine.Enabled = false;
-            //buttonEraser.Enabled = false;
-            //button1px.Enabled = false;
-            //buttonGreen.Enabled = false;
-            //buttonWhite.Enabled = false;
-            //buttonRed.Enabled = false;
-            //buttonBlack.Enabled = false;
-            //button20px.Enabled = false;
-            //button10px.Enabled = false;
-            //button5px.Enabled = false;
-            //buttonCtrlC.Enabled = false;
-            //buttonCtrlZ.Enabled = false;
-            //buttonCtrlV.Enabled = false;
+        private void disableAllButtons() {            
         }
 
         private void buttonPencil_Click(object sender, EventArgs e)
         {
             disableAllButtons();
             this.pictureBox.MouseType = MouseType.Pencil;
-            //this.Cursor = new Cursor(@"resources\Pencil.cur");
+            this.Cursor = new Cursor(new System.IO.MemoryStream(Properties.Resources.Pencil));
         }
 
         private void buttonEraser_Click(object sender, EventArgs e)
         {
             disableAllButtons();
             this.pictureBox.MouseType = MouseType.Eraser;
+            this.Cursor = new Cursor(new System.IO.MemoryStream(Properties.Resources.Eraser));
         }
 
         private void buttonLine_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.MouseType = MouseType.Line;
+            this.Cursor = Cursors.Default;
         }
 
         private void buttonEllipse_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.MouseType = MouseType.Ellipse;
+            this.Cursor = Cursors.Default;
         }
 
         private void buttonRectangle_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.MouseType = MouseType.Rectangle;
+            this.Cursor = Cursors.Default;
         }
 
         private void buttonHotSpot_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.MouseType = MouseType.HotSpot;
+            this.Cursor = Cursors.Default;
         }
 
         private void buttonBlack_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.Color = Color.Black;
         }
 
         private void buttonRed_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.Color = Color.Red;
         }
 
         private void buttonWhite_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.Color = Color.White;
         }
 
         private void buttonGreen_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.Color = Color.Green;
+        }
+
+
+        private void buttonOrange_Click(object sender, EventArgs e)
+        {
+            disableAllButtons();
+            this.pictureBox.Color = Color.Orange;
+        }
+
+        private void buttonYellow_Click(object sender, EventArgs e)
+        {
+            disableAllButtons();
+            this.pictureBox.Color = Color.Yellow;
+        }
+
+        private void buttonBlue_Click(object sender, EventArgs e)
+        {
+            disableAllButtons();
+            this.pictureBox.Color = Color.Blue;
+        }
+
+        private void buttonDeepSkyBlue_Click(object sender, EventArgs e)
+        {
+            disableAllButtons();
+            this.pictureBox.Color = Color.DeepSkyBlue;
+        }
+
+        private void buttonViolet_Click(object sender, EventArgs e)
+        {
+            disableAllButtons();
+            this.pictureBox.Color = Color.Violet;
         }
 
         private void button1px_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.LineSize = 1;
         }
 
         private void button5px_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.LineSize = 5;
         }
 
         private void button10px_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.LineSize = 10;
         }
 
         private void button20px_Click(object sender, EventArgs e)
         {
             disableAllButtons();
-
             this.pictureBox.LineSize = 20;
         }
 
@@ -329,7 +337,7 @@ namespace SharpPaint
             disableAllButtons();
 
             IPaintObject paintObject = pictureBox.CurrentPaintObject;
-            if (paintObject is PaintImage)
+            if (paintObject != null &&  paintObject is PaintImage)
             {
                 PaintImage paintImage = (PaintImage)paintObject;
                 Clipboard.SetImage(paintImage.Bitmap);
